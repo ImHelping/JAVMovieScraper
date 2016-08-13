@@ -191,9 +191,9 @@ public class Data18WebContentParsingProfile extends SiteParsingProfile implement
 		ArrayList<Thumb> trailerImages = new ArrayList<>();
 		
 		Elements trailerImgElements = document.select("img.noborder[title=Scene Preview], div#moviewrap img[src*=/big.jpg], img.noborder[alt=Play this video]:not(img.noborder[src*=play.png]), div#pretrailer a[href*=/trailer] img.noborder:not(img.noborder[src*=play.png])");
-		Elements videoStills = document.select("div:containsOwn(Video Stills:) ~ div img");
+		Elements videoStills = document.select("div:containsOwn(Video Stills:) ~ div img, p:containsOwn(Video Stills:) ~ p a img");
 		//System.out.println("Video stills = " + videoStills);
-		if(trailerImgElements != null && trailerImgElements.size() > 0 && (videoStills == null || videoStills.size() == 0))
+		if(trailerImgElements != null && trailerImgElements.size() > 0)
 		{
 			//add the trailer image
 			try {
@@ -212,7 +212,9 @@ public class Data18WebContentParsingProfile extends SiteParsingProfile implement
 			{
 				try {
 					for(Element currentVideoStill : videoStills)
-						posters.add(new Thumb(fixIPAddressOfData18(currentVideoStill.attr("src"))));
+					{
+						trailerImages.add(new Thumb(fixIPAddressOfData18(currentVideoStill.attr("src"))));
+					}
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -227,7 +229,7 @@ public class Data18WebContentParsingProfile extends SiteParsingProfile implement
 		String docLocation = document.location();
 		//in rare cases the content id used on the viewer page is not the same as that of the url of the page itself
 		String contentIDFromViewerFoundOnPage = "";
-		Element viewerElementOnPage = document.select("a[href*=/viewer/").first();
+		Element viewerElementOnPage = document.select("a[href~=/viewer/[A-Za-z0-9]+/01").first();
 		if(viewerElementOnPage != null)
 		{
 			String hrefContent = viewerElementOnPage.attr("href");

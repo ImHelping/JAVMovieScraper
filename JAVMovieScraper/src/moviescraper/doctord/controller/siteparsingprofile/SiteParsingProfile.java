@@ -361,6 +361,7 @@ public abstract class SiteParsingProfile implements DataItemSource{
 	      con.setRequestMethod("HEAD");
 	      con.setConnectTimeout(CONNECTION_TIMEOUT_VALUE);
 	      con.setReadTimeout(CONNECTION_TIMEOUT_VALUE);
+	      con.setRequestProperty("Referer", URLName);
 	      return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
 	    }
 	    catch(SocketTimeoutException e) {

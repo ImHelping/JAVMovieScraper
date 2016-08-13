@@ -14,6 +14,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import moviescraper.doctord.controller.FileDownloaderUtilities;
 import moviescraper.doctord.model.ImageCache;
 
 import org.apache.commons.io.FileUtils;
@@ -381,6 +382,7 @@ public class Thumb extends MovieDataItem {
 			HttpURLConnection con =
 					(HttpURLConnection) new URL(URLName).openConnection();
 			con.setRequestMethod("HEAD");
+			con.setRequestProperty("Referer", URLName);
 			return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
 		}
 		catch (Exception e) {
@@ -390,7 +392,8 @@ public class Thumb extends MovieDataItem {
 	}
 
 	public void writeImageToFile(File fileNameToWrite) throws IOException {
-			FileUtils.copyURLToFile(thumbURL, fileNameToWrite, connectionTimeout, readTimeout);
+			//FileUtils.copyURLToFile(thumbURL, fileNameToWrite, connectionTimeout, readTimeout);
+			FileDownloaderUtilities.writeURLToFile(thumbURL, fileNameToWrite);
 	}
 
 	public boolean isLoadedFromDisk() {
